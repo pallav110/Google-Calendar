@@ -73,6 +73,8 @@ model Event {
   allDay           Boolean   @default(false)
   color            String    @default("blue")
   timezone         String    @default("UTC")
+  guests           String?
+  reminderMinutes  Int?
   rrule            String?
   recurringEventId String?
   originalStartUtc DateTime?

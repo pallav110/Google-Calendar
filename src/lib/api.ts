@@ -9,6 +9,8 @@ export type EventPayload = {
   allDay: boolean;
   color: string;
   timezone: string;
+  guests?: string | null;
+  reminderMinutes?: number | null;
   rrule?: string | null;
 };
 

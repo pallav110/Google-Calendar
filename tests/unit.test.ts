@@ -25,6 +25,8 @@ const base = (over: Partial<EventRow> = {}): EventRow => ({
   allDay: false,
   color: "blue",
   timezone: "UTC",
+  guests: null,
+  reminderMinutes: null,
   rrule: null,
   recurringEventId: null,
   originalStartUtc: null,

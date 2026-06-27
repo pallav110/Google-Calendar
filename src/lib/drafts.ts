@@ -11,6 +11,8 @@ export type Draft = {
   allDay: boolean;
   color: string;
   freq: string;
+  guests: string;
+  reminder: number | null;
 };
 
 export function saveDraft(draft: Draft) {

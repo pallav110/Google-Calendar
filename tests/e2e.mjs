@@ -70,6 +70,22 @@ r = await req("POST", "/api/events", {
 const weekly = (await r.json()).event;
 check("create recurring (weekly) event -> 201", r.status === 201, `(got ${r.status})`);
 
+console.log("\n── Guests + reminders ──");
+r = await req("POST", "/api/events", {
+  title: "E2E Guests", start: "2026-06-10T05:00:00.000Z", end: "2026-06-10T06:00:00.000Z",
+  allDay: false, color: "red", timezone: "UTC",
+  guests: "alice@example.com,bob@example.com", reminderMinutes: 30,
+});
+const guestEv = (await r.json()).event;
+check("create event with guests + reminder -> 201", r.status === 201, `(got ${r.status})`);
+{
+  const found = (await list()).find((e) => e.title === "E2E Guests");
+  check("guests persisted round-trip", found?.guests === "alice@example.com,bob@example.com", `(got ${found?.guests})`);
+  check("reminderMinutes persisted round-trip", found?.reminderMinutes === 30, `(got ${found?.reminderMinutes})`);
+}
+await req("DELETE", `/api/events/${guestEv.id}?scope=all`);
+check("guests event cleaned up", !(await list()).some((e) => e.title === "E2E Guests"));
+
 console.log("\n── Read + recurrence expansion ──");
 let events = await list();
 const oneOffs = events.filter((e) => e.title === "E2E One-off");

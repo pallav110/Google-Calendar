@@ -12,6 +12,8 @@ export const eventInput = z.object({
   allDay: z.boolean().default(false),
   color: z.enum(COLOR_KEYS as [string, ...string[]]).default("blue"),
   timezone: z.string().default("UTC"),
+  guests: z.string().max(2000).nullable().optional(),
+  reminderMinutes: z.number().int().min(0).max(40320).nullable().optional(),
   rrule: z.string().max(500).nullable().optional(),
 }).refine((e) => new Date(e.end) >= new Date(e.start), {
   message: "End must be after start",

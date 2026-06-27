@@ -139,10 +139,11 @@ export default function TimeGridView({
   const nowMin = now.getHours() * 60 + now.getMinutes();
 
   return (
-    <div className="grid h-full grid-rows-[auto_auto_1fr]">
-      {/* Day headers */}
-      <div className="grid border-b border-neutral-200 dark:border-neutral-800" style={cols(days.length)}>
-        <div className="w-16" />
+    <div className="h-full overflow-y-auto">
+      <div className="sticky top-0 z-30 bg-white dark:bg-neutral-950">
+        {/* Day headers */}
+        <div className="grid border-b border-neutral-200 dark:border-neutral-800" style={cols(days.length)}>
+          <div className="w-16" />
         {days.map((day) => (
           <div key={day.toISOString()} className="py-2 text-center">
             <div className="text-xs uppercase text-neutral-500">
@@ -191,9 +192,10 @@ export default function TimeGridView({
         ))}
       </div>
 
-      {/* Scrollable time grid */}
-      <div className="overflow-y-auto">
-        <div className="flex" style={{ height: DAY_PX }}>
+      </div>
+
+      {/* Time grid */}
+      <div className="flex" style={{ height: DAY_PX }}>
           <div className="relative w-16 shrink-0">
             {HOURS.map((h) => (
               <div
@@ -282,7 +284,6 @@ export default function TimeGridView({
             ))}
           </div>
         </div>
-      </div>
     </div>
   );
 }
@@ -338,7 +339,11 @@ function EventBlock({
           onStartResize("top");
         }}
       />
-      <div className="pointer-events-none font-medium leading-tight">{occ.title || "(No title)"}</div>
+      <div className="pointer-events-none flex items-center gap-1 font-medium leading-tight">
+        <span className="truncate">{occ.title || "(No title)"}</span>
+        {occ.reminderMinutes != null && <span className="shrink-0">🔔</span>}
+        {occ.guests && <span className="shrink-0">👥</span>}
+      </div>
       {height > 28 && <div className="pointer-events-none opacity-70">{timeLabel(occ.start, tz)}</div>}
       <div
         className="absolute inset-x-0 bottom-0 h-1.5 cursor-ns-resize"

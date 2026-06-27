@@ -54,6 +54,8 @@ export async function POST(req: Request) {
       allDay: d.allDay,
       color: d.color,
       timezone: d.timezone,
+      guests: d.guests ?? null,
+      reminderMinutes: d.reminderMinutes ?? null,
       rrule: d.rrule ?? null,
     },
   });

@@ -24,6 +24,15 @@ const FREQS = [
   { value: "monthly", label: "Monthly" },
 ];
 
+const REMINDERS: { value: number | ""; label: string }[] = [
+  { value: "", label: "No notification" },
+  { value: 0, label: "At time of event" },
+  { value: 10, label: "10 minutes before" },
+  { value: 30, label: "30 minutes before" },
+  { value: 60, label: "1 hour before" },
+  { value: 1440, label: "1 day before" },
+];
+
 export default function EventModal({
   target,
   tz,
@@ -58,15 +67,35 @@ export default function EventModal({
   const [freq, setFreq] = useState(
     draft?.freq ?? (src?.isRecurring ? deriveFreq(src) : "none")
   );
+  const initGuests = src?.guests ?? draft?.guests ?? "";
+  const [guestList, setGuestList] = useState<string[]>(initGuests ? initGuests.split(",").filter(Boolean) : []);
+  const [guestInput, setGuestInput] = useState("");
+  const [reminder, setReminder] = useState<number | "">(src?.reminderMinutes ?? draft?.reminder ?? "");
   const [scope, setScope] = useState<EditScope>("single");
+
+  function addGuest() {
+    const v = guestInput.trim().replace(/,$/, "");
+    if (v && !guestList.includes(v)) setGuestList([...guestList, v]);
+    setGuestInput("");
+  }
+  function onReminder(value: string) {
+    const v = value === "" ? "" : Number(value);
+    setReminder(v);
+    if (v !== "" && "Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission();
+    }
+  }
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
   // Persist the in-progress NEW event so a reload / offline drop doesn't lose it.
   useEffect(() => {
     if (editing) return;
-    saveDraft({ title, description, location, start: startTime, end: endTime, allDay, color, freq });
-  }, [editing, title, description, location, startTime, endTime, allDay, color, freq]);
+    saveDraft({
+      title, description, location, start: startTime, end: endTime, allDay, color, freq,
+      guests: guestList.join(","), reminder: reminder === "" ? null : reminder,
+    });
+  }, [editing, title, description, location, startTime, endTime, allDay, color, freq, guestList, reminder]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -108,6 +137,8 @@ export default function EventModal({
       allDay,
       color,
       timezone: tz,
+      guests: guestList.join(",") || null,
+      reminderMinutes: reminder === "" ? null : Number(reminder),
       rrule: freq === "none" ? null : `FREQ=${freq.toUpperCase()}`,
     };
     try {
@@ -152,15 +183,15 @@ export default function EventModal({
       onMouseDown={onClose}
     >
       <motion.div
-        className="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-neutral-900"
+        className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-neutral-900"
         initial={{ scale: 0.95, opacity: 0, y: 10 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.95, opacity: 0, y: 10 }}
         transition={{ type: "spring", stiffness: 320, damping: 28 }}
         onMouseDown={(e) => e.stopPropagation()}
       >
-        <div className="h-1.5" style={{ background: colorOf(color).solid }} />
-        <div className="space-y-4 p-5">
+        <div className="h-1.5 shrink-0" style={{ background: colorOf(color).solid }} />
+        <div className="space-y-4 overflow-y-auto p-5">
           <input
             autoFocus
             value={title}
@@ -176,15 +207,15 @@ export default function EventModal({
 
           {allDay ? (
             <div className="flex items-center gap-2 text-sm">
-              <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className={inputCls} />
-              <span className="text-neutral-400">→</span>
-              <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className={inputCls} />
+              <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className={timeCls} />
+              <span className="shrink-0 text-neutral-400">→</span>
+              <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className={timeCls} />
             </div>
           ) : (
             <div className="flex items-center gap-2 text-sm">
-              <input type="datetime-local" value={startTime} onChange={(e) => setStartTime(e.target.value)} className={inputCls} />
-              <span className="text-neutral-400">→</span>
-              <input type="datetime-local" value={endTime} onChange={(e) => setEndTime(e.target.value)} className={inputCls} />
+              <input type="datetime-local" value={startTime} onChange={(e) => setStartTime(e.target.value)} className={timeCls} />
+              <span className="shrink-0 text-neutral-400">→</span>
+              <input type="datetime-local" value={endTime} onChange={(e) => setEndTime(e.target.value)} className={timeCls} />
             </div>
           )}
 
@@ -195,6 +226,56 @@ export default function EventModal({
               </option>
             ))}
           </select>
+
+          {/* Notification / reminder */}
+          <label className="flex items-center gap-2 text-sm">
+            <span className="shrink-0 text-neutral-400">🔔</span>
+            <select value={reminder} onChange={(e) => onReminder(e.target.value)} className={inputCls}>
+              {REMINDERS.map((r) => (
+                <option key={r.label} value={r.value}>
+                  {r.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          {/* Guests */}
+          <div>
+            <div className="flex items-center gap-2 text-sm">
+              <span className="shrink-0 text-neutral-400">👥</span>
+              <input
+                value={guestInput}
+                onChange={(e) => setGuestInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === ",") {
+                    e.preventDefault();
+                    addGuest();
+                  }
+                }}
+                onBlur={addGuest}
+                placeholder="Add guests (press Enter)"
+                className={inputCls}
+              />
+            </div>
+            {guestList.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {guestList.map((g) => (
+                  <span
+                    key={g}
+                    className="inline-flex items-center gap-1 rounded-full bg-neutral-100 px-2.5 py-1 text-xs dark:bg-neutral-800"
+                  >
+                    {g}
+                    <button
+                      onClick={() => setGuestList(guestList.filter((x) => x !== g))}
+                      className="text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
 
           <input
             value={location}
@@ -274,6 +355,9 @@ export default function EventModal({
 
 const inputCls =
   "w-full rounded-lg border border-neutral-300 bg-transparent px-3 py-2 text-sm outline-none focus:border-blue-500 dark:border-neutral-700";
+
+const timeCls =
+  "min-w-0 flex-1 rounded-lg border border-neutral-300 bg-transparent px-3 py-2 text-sm outline-none focus:border-blue-500 dark:border-neutral-700";
 
 function deriveFreq(occ: Occurrence): string {
   const m = occ.rrule?.match(/FREQ=(\w+)/i);

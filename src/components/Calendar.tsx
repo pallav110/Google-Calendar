@@ -89,6 +89,27 @@ export default function Calendar({ user }: { user: User }) {
     if (mounted) reload();
   }, [mounted, reload]);
 
+  // Fire a browser notification when an event's reminder time arrives (while open).
+  useEffect(() => {
+    if (!("Notification" in window)) return;
+    const now = Date.now();
+    const timers = events.flatMap((e) => {
+      if (e.reminderMinutes == null) return [];
+      const delay = new Date(e.start).getTime() - e.reminderMinutes * 60000 - now;
+      if (delay <= 0 || delay > 86_400_000) return [];
+      return [
+        setTimeout(() => {
+          if (Notification.permission === "granted") {
+            new Notification(e.title || "Event", {
+              body: `Starts ${new Date(e.start).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}`,
+            });
+          }
+        }, delay),
+      ];
+    });
+    return () => timers.forEach(clearTimeout);
+  }, [events]);
+
   const navigate = useCallback(
     (dir: -1 | 0 | 1) => {
       if (dir === 0) return setCursor(new Date());

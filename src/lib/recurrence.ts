@@ -11,6 +11,8 @@ export type EventRow = {
   allDay: boolean;
   color: string;
   timezone: string;
+  guests: string | null;
+  reminderMinutes: number | null;
   rrule: string | null;
   recurringEventId: string | null;
   originalStartUtc: Date | string | null;
@@ -33,6 +35,8 @@ export type Occurrence = {
   allDay: boolean;
   color: string;
   timezone: string;
+  guests: string | null;
+  reminderMinutes: number | null;
   isRecurring: boolean;
   rrule: string | null;
 };
@@ -61,6 +65,8 @@ function build(
     allDay: fields.allDay,
     color: fields.color,
     timezone: fields.timezone,
+    guests: fields.guests,
+    reminderMinutes: fields.reminderMinutes,
     isRecurring,
     rrule,
   };
