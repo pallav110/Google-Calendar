@@ -11,6 +11,8 @@ export type EventPayload = {
   timezone: string;
   guests?: string | null;
   reminderMinutes?: number | null;
+  visibility?: string;
+  busy?: boolean;
   rrule?: string | null;
 };
 

@@ -13,6 +13,8 @@ export type EventRow = {
   timezone: string;
   guests: string | null;
   reminderMinutes: number | null;
+  visibility: string;
+  busy: boolean;
   rrule: string | null;
   recurringEventId: string | null;
   originalStartUtc: Date | string | null;
@@ -37,6 +39,8 @@ export type Occurrence = {
   timezone: string;
   guests: string | null;
   reminderMinutes: number | null;
+  visibility: string;
+  busy: boolean;
   isRecurring: boolean;
   rrule: string | null;
 };
@@ -67,6 +71,8 @@ function build(
     timezone: fields.timezone,
     guests: fields.guests,
     reminderMinutes: fields.reminderMinutes,
+    visibility: fields.visibility,
+    busy: fields.busy,
     isRecurring,
     rrule,
   };

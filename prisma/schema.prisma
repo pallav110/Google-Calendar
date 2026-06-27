@@ -75,6 +75,8 @@ model Event {
   timezone         String    @default("UTC")
   guests           String?
   reminderMinutes  Int?
+  visibility       String    @default("default")
+  busy             Boolean   @default(true)
   rrule            String?
   recurringEventId String?
   originalStartUtc DateTime?

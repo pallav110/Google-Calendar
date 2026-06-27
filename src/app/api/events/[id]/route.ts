@@ -40,6 +40,8 @@ export async function PATCH(req: Request, { params }: Ctx) {
     timezone: d.timezone,
     guests: d.guests ?? null,
     reminderMinutes: d.reminderMinutes ?? null,
+    visibility: d.visibility,
+    busy: d.busy,
   };
 
   const scope = body?.scope === "single" ? "single" : "all";

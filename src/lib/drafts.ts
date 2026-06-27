@@ -13,6 +13,8 @@ export type Draft = {
   freq: string;
   guests: string;
   reminder: number | null;
+  visibility: string;
+  busy: boolean;
 };
 
 export function saveDraft(draft: Draft) {

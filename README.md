@@ -37,6 +37,7 @@ overlap detection, offline drafts, and authentication.
 - 🧱 **Overlap detection** — clashing events are detected and the user is warned before saving.
 - 🌍 **Timezone correctness** — every timestamp is stored in **UTC** and rendered in the **viewer's local timezone**.
 - 🔢 **Smart event layout** — overlapping events split into side-by-side columns.
+- 👥 **Guests, 🔔 reminders, busy/free & visibility** — a Google-style event editor with an icon rail and a "More options" expander.
 
 **Bonus**
 - 🔐 **Authentication** — email/password (hashed) **and** Google OAuth (Auth.js).
@@ -49,6 +50,8 @@ overlap detection, offline drafts, and authentication.
 - 🌗 **Dark mode** with persisted preference.
 - 🔴 **Live "current time" indicator** line in week/day views.
 - 🗓️ **Mini-month navigator** in the sidebar.
+- 🔔 **Real browser notifications** — a desktop alert fires when an event's reminder is due (while the app is open).
+- 📱 **Collapsible sidebar** — hamburger toggles an inline column on desktop, a slide-over drawer on mobile.
 
 ---
 
@@ -300,7 +303,7 @@ npm run test:e2e  # end-to-end — register → auth → create → recur → ed
 - **DST-correct recurrence** by expanding `RRULE` in the event's own timezone.
 - **Real-time sync** across devices via WebSockets/SSE and incremental **sync tokens**.
 - **Richer recurrence UI** (e.g. "every 2nd Tuesday", custom end dates, `COUNT`/`UNTIL`).
-- **Reminders / notifications** and **invitees / sharing**.
+- **Real guest invitations** (email delivery + RSVP) building on the existing guest list, and **calendar sharing**.
 - **Search & command palette** for fast navigation and natural-language quick-add.
 - **Offline-first write queue** that replays mutations made while offline.
 

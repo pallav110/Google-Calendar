@@ -56,6 +56,8 @@ export async function POST(req: Request) {
       timezone: d.timezone,
       guests: d.guests ?? null,
       reminderMinutes: d.reminderMinutes ?? null,
+      visibility: d.visibility,
+      busy: d.busy,
       rrule: d.rrule ?? null,
     },
   });

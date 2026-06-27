@@ -14,6 +14,8 @@ export const eventInput = z.object({
   timezone: z.string().default("UTC"),
   guests: z.string().max(2000).nullable().optional(),
   reminderMinutes: z.number().int().min(0).max(40320).nullable().optional(),
+  visibility: z.enum(["default", "public", "private"]).default("default"),
+  busy: z.boolean().default(true),
   rrule: z.string().max(500).nullable().optional(),
 }).refine((e) => new Date(e.end) >= new Date(e.start), {
   message: "End must be after start",
