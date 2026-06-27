@@ -17,12 +17,13 @@ overlap detection, offline drafts, and authentication.
 4. [Data model](#data-model)
 5. [Local setup](#local-setup)
 6. [Environment variables](#environment-variables)
-7. [Business logic & edge cases](#business-logic--edge-cases)
-8. [Animations & interactions](#animations--interactions)
-9. [Keyboard shortcuts](#keyboard-shortcuts)
-10. [Deployment (Vercel)](#deployment-vercel)
-11. [Future enhancements](#future-enhancements)
-12. [Theory Questions](#theory-questions)
+7. [Testing](#testing)
+8. [Business logic & edge cases](#business-logic--edge-cases)
+9. [Animations & interactions](#animations--interactions)
+10. [Keyboard shortcuts](#keyboard-shortcuts)
+11. [Deployment (Vercel)](#deployment-vercel)
+12. [Future enhancements](#future-enhancements)
+13. [Theory Questions](#theory-questions)
 
 ---
 
@@ -208,6 +209,23 @@ Create an account on the sign-up page, or use **Continue with Google** if you co
 See [`.env.example`](.env.example).
 
 ---
+
+## Testing
+
+Two layers of tests guard the logic and the API contract:
+
+```bash
+npm test          # unit tests — recurrence expansion, overlap, column packing (15 checks)
+npm run test:e2e  # end-to-end — register → auth → create → recur → edit-instance → delete (21 checks)
+```
+
+- **Unit tests** ([`tests/unit.test.ts`](tests/unit.test.ts)) exercise the pure business logic
+  with no server or database: recurring-series expansion (including moved overrides and
+  cancelled occurrences), the half-open overlap rule, and side-by-side column packing.
+- **End-to-end tests** ([`tests/e2e.mjs`](tests/e2e.mjs)) drive the real HTTP API like a user —
+  registering an account, signing in, then creating, expanding, editing a single recurring
+  instance, deleting one occurrence, and deleting a whole series, asserting every response.
+  It targets the deployed URL by default; set `BASE=http://localhost:3000` to run it locally.
 
 ## Business logic & edge cases
 
