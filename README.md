@@ -4,7 +4,7 @@ A high-fidelity, full-stack Google Calendar clone with month / week / day views,
 drag-and-drop + resizable events, recurring events, timezone-correct storage,
 overlap detection, offline drafts, and authentication.
 
-> **Live demo:** _add your Vercel URL here_
+> **Live demo:** https://google-calendar-ruddy.vercel.app
 > **Stack:** Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · PostgreSQL (Neon) · Prisma 7 · Auth.js (NextAuth v5) · Framer Motion
 
 ---
