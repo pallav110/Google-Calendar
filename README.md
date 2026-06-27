@@ -30,28 +30,28 @@ overlap detection, offline drafts, and authentication.
 ## Features
 
 **Core**
-- 📅 **Month, Week, and Day views** that closely mirror Google Calendar.
-- ✍️ **Create / edit / delete** events through an animated modal.
-- 🖱️ **Drag to move**, **drag edges to resize**, and **drag on empty grid to create** — all via the Pointer Events API (works with touch).
-- ↔️ **Drag events across days** in month view.
-- 🧱 **Overlap detection** — clashing events are detected and the user is warned before saving.
-- 🌍 **Timezone correctness** — every timestamp is stored in **UTC** and rendered in the **viewer's local timezone**.
-- 🔢 **Smart event layout** — overlapping events split into side-by-side columns.
-- 👥 **Guests, 🔔 reminders, busy/free & visibility** — a Google-style event editor with an icon rail and a "More options" expander.
+- **Month, Week, and Day views** that closely mirror Google Calendar.
+- **Create / edit / delete** events through an animated modal.
+- **Drag to move**, **drag edges to resize**, and **drag on empty grid to create** — all via the Pointer Events API (works with touch).
+- **Drag events across days** in month view.
+- **Overlap detection** — clashing events are detected and the user is warned before saving.
+- **Timezone correctness** — every timestamp is stored in **UTC** and rendered in the **viewer's local timezone**.
+- **Smart event layout** — overlapping events split into side-by-side columns.
+- **Guests, reminders, busy/free & visibility** — a Google-style event editor with an icon rail and a "More options" expander.
 
 **Bonus**
-- 🔐 **Authentication** — email/password (hashed) **and** Google OAuth (Auth.js).
-- 🔁 **Recurring events** — daily / weekly / monthly via the iCalendar `RRULE` standard.
-- ✂️ **Edit or delete a single occurrence** of a series, or the whole series.
-- 💾 **Offline draft support** — an in-progress new event is persisted to `localStorage` and survives reloads / connection drops.
+- **Authentication** — email/password (hashed) **and** Google OAuth (Auth.js).
+- **Recurring events** — daily / weekly / monthly via the iCalendar `RRULE` standard.
+- **Edit or delete a single occurrence** of a series, or the whole series.
+- **Offline draft support** — an in-progress new event is persisted to `localStorage` and survives reloads / connection drops.
 
-**Surprises** 🎁
-- ⌨️ **Keyboard shortcuts** (Google-style: `m` `w` `d`, `t`, `n`/`p`, `c`).
-- 🌗 **Dark mode** with persisted preference.
-- 🔴 **Live "current time" indicator** line in week/day views.
-- 🗓️ **Mini-month navigator** in the sidebar.
-- 🔔 **Real browser notifications** — a desktop alert fires when an event's reminder is due (while the app is open).
-- 📱 **Collapsible sidebar** — hamburger toggles an inline column on desktop, a slide-over drawer on mobile.
+**Surprises**
+- **Keyboard shortcuts** (Google-style: `m` `w` `d`, `t`, `n`/`p`, `c`).
+- **Dark mode** with persisted preference.
+- **Live "current time" indicator** line in week/day views.
+- **Mini-month navigator** in the sidebar.
+- **Real browser notifications** — a desktop alert fires when an event's reminder is due (while the app is open).
+- **Collapsible sidebar** — hamburger toggles an inline column on desktop, a slide-over drawer on mobile.
 
 ---
 
@@ -204,9 +204,9 @@ Create an account on the sign-up page, or use **Continue with Google** if you co
 
 | Variable | Required | Description |
 |---|---|---|
-| `DATABASE_URL` | ✅ | PostgreSQL connection string (Neon pooled URL). |
-| `AUTH_SECRET` | ✅ | Secret used to sign session JWTs. Generate any random 32-byte base64 string (e.g. `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`). |
-| `AUTH_URL` | ✅ | App base URL (`http://localhost:3000` locally; your Vercel URL in prod). |
+| `DATABASE_URL` | Yes | PostgreSQL connection string (Neon pooled URL). |
+| `AUTH_SECRET` | Yes | Secret used to sign session JWTs. Generate any random 32-byte base64 string (e.g. `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`). |
+| `AUTH_URL` | Yes | App base URL (`http://localhost:3000` locally; your Vercel URL in prod). |
 | `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` | optional | Google OAuth credentials. If omitted, the Google button is hidden and email/password still works. |
 
 See [`.env.example`](.env.example).
