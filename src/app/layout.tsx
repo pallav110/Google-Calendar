@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -12,9 +12,43 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const description =
+  "A fast, beautiful calendar in your browser. Plan your week, drag to reschedule, set repeating events, and never double-book — with day, week, and month views.";
+
 export const metadata: Metadata = {
-  title: "Calendar",
-  description: "A Google Calendar–style scheduling app",
+  metadataBase: new URL("https://calora-calendar.vercel.app"),
+  title: {
+    default: "Calora — your time, organized",
+    template: "%s · Calora",
+  },
+  description,
+  applicationName: "Calora",
+  keywords: [
+    "calendar",
+    "scheduling",
+    "events",
+    "planner",
+    "week view",
+    "recurring events",
+    "google calendar alternative",
+  ],
+  authors: [{ name: "Calora" }],
+  openGraph: {
+    type: "website",
+    siteName: "Calora",
+    title: "Calora — your time, organized",
+    description,
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Calora — your time, organized",
+    description,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#2563eb",
 };
 
 export default function RootLayout({
