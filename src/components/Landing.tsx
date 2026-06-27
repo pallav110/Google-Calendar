@@ -3,14 +3,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { AlertTriangle, Calendar, Globe, Layers, Move, Moon, Repeat } from "./icons";
 
 const FEATURES = [
-  { icon: "🗓️", title: "Day, week & month", desc: "Switch views instantly — or with a keystroke. Your schedule, at every zoom level." },
-  { icon: "🖱️", title: "Drag, drop & resize", desc: "Grab an event to move it, drag its edge to resize, or sweep across the grid to create one." },
-  { icon: "🔁", title: "Repeating events", desc: "Daily, weekly or monthly. Edit a single occurrence or the whole series." },
-  { icon: "🧱", title: "Clash detection", desc: "We warn you the moment a new event overlaps something already on your calendar." },
-  { icon: "🌍", title: "Timezone smart", desc: "Stored in UTC, shown in your local time — correct wherever you are." },
-  { icon: "🌗", title: "Light & dark", desc: "A crisp light theme and an easy-on-the-eyes dark mode, remembered between visits." },
+  { Icon: Calendar, title: "Day, week & month", desc: "Switch views instantly — or with a keystroke. Your schedule, at every zoom level." },
+  { Icon: Move, title: "Drag, drop & resize", desc: "Grab an event to move it, drag its edge to resize, or sweep across the grid to create one." },
+  { Icon: Repeat, title: "Repeating events", desc: "Daily, weekly or monthly. Edit a single occurrence or the whole series." },
+  { Icon: Layers, title: "Clash detection", desc: "We warn you the moment a new event overlaps something already on your calendar." },
+  { Icon: Globe, title: "Timezone smart", desc: "Stored in UTC, shown in your local time — correct wherever you are." },
+  { Icon: Moon, title: "Light & dark", desc: "A crisp light theme and an easy-on-the-eyes dark mode, remembered between visits." },
 ];
 
 const FAQS = [
@@ -50,7 +51,7 @@ export default function Landing() {
       <section className="mx-auto grid max-w-6xl items-center gap-12 px-6 py-12 md:grid-cols-2 md:py-20">
         <motion.div initial="hidden" animate="show" variants={fade}>
           <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700">
-            📅 Your time, organized
+            <Calendar className="h-4 w-4" /> Your time, organized
           </span>
           <h1 className="mt-5 text-5xl font-semibold leading-tight tracking-tight text-neutral-900 md:text-6xl">
             A calendar that
@@ -92,7 +93,9 @@ export default function Landing() {
               variants={fade}
               className="rounded-2xl border border-neutral-200 p-6 transition hover:shadow-md"
             >
-              <div className="text-3xl">{f.icon}</div>
+              <div className="grid h-11 w-11 place-items-center rounded-xl bg-blue-50 text-blue-600">
+                <f.Icon className="h-5 w-5" />
+              </div>
               <h3 className="mt-3 text-lg font-medium text-neutral-900">{f.title}</h3>
               <p className="mt-1.5 text-sm leading-relaxed text-neutral-600">{f.desc}</p>
             </motion.div>
@@ -333,7 +336,7 @@ function DragVisual() {
       </div>
       <div className="absolute left-28 top-24 w-40 rotate-3 rounded-md border-2 border-dashed border-blue-400 bg-blue-200/50 px-3 py-2 text-xs font-medium text-blue-700 shadow-lg">
         Team sync
-        <span className="absolute -bottom-5 -right-2 text-lg">🖱️</span>
+        <span className="absolute -bottom-5 -right-2 text-blue-600"><Move className="h-5 w-5" /></span>
       </div>
       <div className="absolute bottom-3 left-6 text-xs text-neutral-400">snaps to 15-minute steps</div>
     </VisualFrame>
@@ -352,8 +355,8 @@ function RepeatVisual() {
             </div>
           </div>
         ))}
-        <div className="mt-2 inline-flex w-fit items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-medium text-green-700 shadow">
-          🔁 Repeats weekly
+        <div className="mt-2 inline-flex w-fit items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-medium text-green-700 shadow">
+          <Repeat className="h-3.5 w-3.5" /> Repeats weekly
         </div>
       </div>
     </VisualFrame>
@@ -371,8 +374,8 @@ function OverlapVisual() {
           <div className="-mt-1 ml-6 rounded-md border-l-4 border-red-500 bg-red-100 px-3 py-2 text-xs font-medium text-red-800">
             2:30 – 3:30 · Client call
           </div>
-          <div className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800 shadow-sm">
-            ⚠ Overlaps with “Design review”. Save anyway?
+          <div className="flex items-center gap-1.5 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800 shadow-sm">
+            <AlertTriangle className="h-3.5 w-3.5 shrink-0" /> Overlaps with “Design review”. Save anyway?
           </div>
         </div>
       </div>

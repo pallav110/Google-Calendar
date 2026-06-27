@@ -9,6 +9,7 @@ import type { Occurrence } from "@/lib/recurrence";
 import type { ModalTarget } from "@/lib/types";
 import { startOfDay, endOfDay } from "@/lib/dates";
 import { clearDraft, loadDraft, saveDraft } from "@/lib/drafts";
+import { AlertTriangle, Bell, Briefcase, Clock, Droplet, Lock, MapPin, Text, Users } from "./icons";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 const toLocalInput = (iso: string) => {
@@ -227,7 +228,7 @@ export default function EventModal({
           </Row>
 
           {/* Time */}
-          <Row icon="🕐" align="top">
+          <Row icon={<Clock />} align="top">
             <div className="space-y-2">
               {allDay ? (
                 <div className="flex items-center gap-2 text-sm">
@@ -259,7 +260,7 @@ export default function EventModal({
           </Row>
 
           {/* Guests */}
-          <Row icon="👥" align="top">
+          <Row icon={<Users />} align="top">
             <input
               value={guestInput}
               onChange={(e) => setGuestInput(e.target.value)}
@@ -288,17 +289,17 @@ export default function EventModal({
           </Row>
 
           {/* Location */}
-          <Row icon="📍">
+          <Row icon={<MapPin />}>
             <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Add location" className={inputCls} />
           </Row>
 
           {/* Description */}
-          <Row icon="📝" align="top">
+          <Row icon={<Text />} align="top">
             <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Add description" rows={2} className={`${inputCls} resize-none`} />
           </Row>
 
           {/* Reminder */}
-          <Row icon="🔔">
+          <Row icon={<Bell />}>
             <select value={reminder} onChange={(e) => onReminder(e.target.value)} className={inputCls}>
               {REMINDERS.map((r) => (
                 <option key={r.label} value={r.value}>
@@ -309,7 +310,7 @@ export default function EventModal({
           </Row>
 
           {/* Color */}
-          <Row icon="🎨">
+          <Row icon={<Droplet />}>
             <div className="flex items-center gap-2">
               {COLOR_KEYS.map((k) => (
                 <button
@@ -326,13 +327,13 @@ export default function EventModal({
           {/* Advanced (toggled by hamburger / More options) */}
           {expanded && (
             <>
-              <Row icon="💼">
+              <Row icon={<Briefcase />}>
                 <select value={busy ? "busy" : "free"} onChange={(e) => setBusy(e.target.value === "busy")} className={inputCls}>
                   <option value="busy">Busy</option>
                   <option value="free">Free</option>
                 </select>
               </Row>
-              <Row icon="🔒">
+              <Row icon={<Lock />}>
                 <select value={visibility} onChange={(e) => setVisibility(e.target.value)} className={inputCls}>
                   <option value="default">Default visibility</option>
                   <option value="public">Public</option>
@@ -343,9 +344,12 @@ export default function EventModal({
           )}
 
           {clashes.length > 0 && (
-            <div className="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800 dark:bg-amber-950/40 dark:text-amber-300">
-              ⚠ Overlaps with {clashes.length} other event{clashes.length > 1 ? "s" : ""} ({clashes.slice(0, 2).map((c) => c.title).join(", ")}
-              {clashes.length > 2 ? "…" : ""}). You can still save.
+            <div className="flex items-start gap-2 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800 dark:bg-amber-950/40 dark:text-amber-300">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+              <span>
+                Overlaps with {clashes.length} other event{clashes.length > 1 ? "s" : ""} ({clashes.slice(0, 2).map((c) => c.title).join(", ")}
+                {clashes.length > 2 ? "…" : ""}). You can still save.
+              </span>
             </div>
           )}
 

@@ -7,6 +7,7 @@ import type { Occurrence } from "@/lib/recurrence";
 import { DAY_PX, HOUR_PX, SNAP_MIN } from "@/lib/types";
 import { HOURS, isToday, startOfDay, endOfDay } from "@/lib/dates";
 import { timeLabel } from "@/lib/time";
+import { Bell, Users } from "./icons";
 
 type Gesture =
   | { kind: "create"; dayIndex: number; anchorMin: number; curMin: number; moved: boolean }
@@ -341,8 +342,8 @@ function EventBlock({
       />
       <div className="pointer-events-none flex items-center gap-1 font-medium leading-tight">
         <span className="truncate">{occ.title || "(No title)"}</span>
-        {occ.reminderMinutes != null && <span className="shrink-0">🔔</span>}
-        {occ.guests && <span className="shrink-0">👥</span>}
+        {occ.reminderMinutes != null && <Bell className="h-3 w-3 shrink-0" />}
+        {occ.guests && <Users className="h-3 w-3 shrink-0" />}
       </div>
       {height > 28 && <div className="pointer-events-none opacity-70">{timeLabel(occ.start, tz)}</div>}
       <div

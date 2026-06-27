@@ -30,10 +30,12 @@ export default function Og() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: 56,
             }}
           >
-            📅
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <path d="M3 10h18M8 2v4M16 2v4" />
+            </svg>
           </div>
           <div style={{ fontSize: 60, fontWeight: 700 }}>Calora</div>
         </div>

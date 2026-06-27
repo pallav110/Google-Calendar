@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signOut } from "next-auth/react";
 import { format, isSameMonth, weekGrid } from "@/lib/dates";
 import type { ViewType } from "@/lib/types";
+import { Moon, Sun } from "./icons";
 
 type User = { name: string | null; email: string | null; image: string | null };
 
@@ -101,9 +102,9 @@ export default function CalendarHeader({
         <button
           onClick={onToggleDark}
           title="Toggle theme"
-          className="grid h-9 w-9 place-items-center rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800"
+          className="grid h-9 w-9 place-items-center rounded-full text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800"
         >
-          {dark ? "🌙" : "☀️"}
+          {dark ? <Moon className="h-4.5 w-4.5" /> : <Sun className="h-4.5 w-4.5" />}
         </button>
 
         <div className="relative">
