@@ -10,6 +10,7 @@ const googleEnabled = Boolean(process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOO
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
+  trustHost: true,
   pages: { signIn: "/login" },
   providers: [
     ...(googleEnabled ? [Google] : []),
