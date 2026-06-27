@@ -182,8 +182,8 @@ npm install
 # 2. Configure environment
 cp .env.example .env
 #   then edit .env and set DATABASE_URL (and optionally Google OAuth).
-#   Generate an auth secret:
-npx auth secret        # writes AUTH_SECRET, or set it yourself
+#   Generate an AUTH_SECRET (any random 32-byte base64 string):
+node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 
 # 3. Create the database schema
 npx prisma migrate dev --name init
@@ -201,7 +201,7 @@ Create an account on the sign-up page, or use **Continue with Google** if you co
 | Variable | Required | Description |
 |---|---|---|
 | `DATABASE_URL` | ✅ | PostgreSQL connection string (Neon pooled URL). |
-| `AUTH_SECRET` | ✅ | Secret used to sign session JWTs. Generate with `npx auth secret`. |
+| `AUTH_SECRET` | ✅ | Secret used to sign session JWTs. Generate any random 32-byte base64 string (e.g. `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`). |
 | `AUTH_URL` | ✅ | App base URL (`http://localhost:3000` locally; your Vercel URL in prod). |
 | `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` | optional | Google OAuth credentials. If omitted, the Google button is hidden and email/password still works. |
 
