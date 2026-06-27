@@ -17,13 +17,14 @@ const ms = (s: string) => new Date(s).getTime();
  *  2. All-day events — should they count as overlaps, or are they meant to
  *     coexist with timed events? (Google treats all-day as a separate lane.)
  *
- * TODO(you): implement this. A clean approach is the half-open interval test:
- *   two intervals [aStart, aEnd) and [bStart, bEnd) overlap when
- *   aStart < bEnd AND bStart < aEnd.
- * Decide how `allDay` factors in, then filter `others` down to the clashers.
+ * Implementation: half-open interval test, with all-day events kept in their own
+ * lane (they never clash with timed events, matching Google Calendar).
  */
 export function findOverlaps<T extends Interval>(candidate: Interval, others: T[]): T[] {
-  // TODO(you): replace this stub.
-  void candidate;
-  return others.length ? [] : [];
+  return others.filter(
+    (o) =>
+      o.allDay === candidate.allDay &&
+      ms(candidate.start) < ms(o.end) &&
+      ms(o.start) < ms(candidate.end)
+  );
 }

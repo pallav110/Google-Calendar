@@ -34,6 +34,7 @@ export type Occurrence = {
   color: string;
   timezone: string;
   isRecurring: boolean;
+  rrule: string | null;
 };
 
 const iso = (d: Date | string) => new Date(d).toISOString();
@@ -45,7 +46,8 @@ function build(
   start: Date,
   end: Date,
   occurrenceStart: Date,
-  isRecurring: boolean
+  isRecurring: boolean,
+  rrule: string | null
 ): Occurrence {
   return {
     seriesId,
@@ -60,6 +62,7 @@ function build(
     color: fields.color,
     timezone: fields.timezone,
     isRecurring,
+    rrule,
   };
 }
 
@@ -82,7 +85,7 @@ export function expand(rows: EventRow[], from: Date, to: Date): Occurrence[] {
 
     if (!base.rrule) {
       if (baseStart < to && new Date(base.endUtc) > from) {
-        out.push(build(base, base.id, null, baseStart, new Date(base.endUtc), baseStart, false));
+        out.push(build(base, base.id, null, baseStart, new Date(base.endUtc), baseStart, false, null));
       }
       continue;
     }
@@ -98,11 +101,11 @@ export function expand(rows: EventRow[], from: Date, to: Date): Occurrence[] {
         consumed.add(key);
         if (override.cancelled) continue;
         out.push(
-          build(override, base.id, override.id, new Date(override.startUtc), new Date(override.endUtc), occStart, true)
+          build(override, base.id, override.id, new Date(override.startUtc), new Date(override.endUtc), occStart, true, base.rrule)
         );
       } else {
         const occEnd = new Date(occStart.getTime() + duration);
-        out.push(build(base, base.id, null, occStart, occEnd, occStart, true));
+        out.push(build(base, base.id, null, occStart, occEnd, occStart, true, base.rrule));
       }
     }
   }
@@ -114,7 +117,7 @@ export function expand(rows: EventRow[], from: Date, to: Date): Occurrence[] {
     if (consumed.has(key)) continue;
     if (new Date(o.startUtc) < to && new Date(o.endUtc) > from) {
       out.push(
-        build(o, o.recurringEventId!, o.id, new Date(o.startUtc), new Date(o.endUtc), new Date(o.originalStartUtc), true)
+        build(o, o.recurringEventId!, o.id, new Date(o.startUtc), new Date(o.endUtc), new Date(o.originalStartUtc), true, null)
       );
     }
   }
