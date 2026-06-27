@@ -1,10 +1,10 @@
-import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import Calendar from "@/components/Calendar";
+import Landing from "@/components/Landing";
 
 export default async function Home() {
   const session = await auth();
-  if (!session?.user) redirect("/login");
+  if (!session?.user) return <Landing />;
 
   return (
     <Calendar
