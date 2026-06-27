@@ -4,11 +4,15 @@ import { useState } from "react";
 import { addMonths, format, isSameDay, isSameMonth, isToday, monthGrid } from "@/lib/dates";
 
 export default function Sidebar({
+  open,
+  onClose,
   cursor,
   onPickDate,
   onCreate,
   tz,
 }: {
+  open: boolean;
+  onClose: () => void;
   cursor: Date;
   onPickDate: (d: Date) => void;
   onCreate: () => void;
@@ -17,8 +21,13 @@ export default function Sidebar({
   const [miniMonth, setMiniMonth] = useState<Date>(cursor);
   const grid = monthGrid(miniMonth);
 
+  if (!open) return null;
+
   return (
-    <aside className="hidden w-64 shrink-0 flex-col gap-4 border-r border-neutral-200 p-4 dark:border-neutral-800 md:flex">
+    <>
+      {/* Mobile backdrop — tapping it closes the drawer */}
+      <div className="fixed inset-0 z-30 bg-black/30 md:hidden" onClick={onClose} />
+      <aside className="fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 flex-col gap-4 overflow-y-auto border-r border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-950 md:static md:z-auto md:overflow-visible">
       <button
         onClick={onCreate}
         className="flex w-fit items-center gap-3 rounded-2xl border border-neutral-200 bg-white px-5 py-3.5 text-sm font-medium shadow-sm transition hover:shadow-md dark:border-neutral-700 dark:bg-neutral-900"
@@ -80,6 +89,7 @@ export default function Sidebar({
         <p className="font-medium text-neutral-600 dark:text-neutral-400">Timezone</p>
         <p className="truncate">{tz}</p>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 }

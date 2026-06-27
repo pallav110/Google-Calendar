@@ -49,12 +49,14 @@ export default function Calendar({ user }: { user: User }) {
   const [events, setEvents] = useState<Occurrence[]>([]);
   const [modal, setModal] = useState<ModalTarget | null>(null);
   const [dark, setDark] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     setMounted(true);
     const saved = localStorage.getItem("gcal:dark");
     const prefersDark = saved ? saved === "1" : window.matchMedia("(prefers-color-scheme: dark)").matches;
     setDark(prefersDark);
+    setSidebarOpen(window.matchMedia("(min-width: 768px)").matches);
   }, []);
 
   useEffect(() => {
@@ -165,11 +167,14 @@ export default function Calendar({ user }: { user: User }) {
         user={user}
         dark={dark}
         onToggleDark={() => setDark((d) => !d)}
+        onToggleSidebar={() => setSidebarOpen((o) => !o)}
         onView={setView}
         onNavigate={navigate}
       />
       <div className="flex min-h-0 flex-1">
         <Sidebar
+          open={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
           cursor={cursor}
           onPickDate={setCursor}
           onCreate={() => {
